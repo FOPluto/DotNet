@@ -1,7 +1,11 @@
 package com.ysu.net.entity;
 
 public class UserInfo {
-    double heartRate;
+    String name;
 
-    double bloodPressure;
+    String ip;
+
+    Integer floor;
+
+
 }
