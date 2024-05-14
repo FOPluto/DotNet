@@ -26,6 +26,11 @@ public class MainWindow {
     private JTabbedPane jTabbedPane;
 
     /**
+     *
+     */
+    private JTable table;
+
+    /**
      * 表格数据
      */
     Object[] columnNames = {"接收时间", "楼层", "房间号", "床号", "姓名", "异常信息"};
@@ -92,7 +97,7 @@ public class MainWindow {
 
         // 创建表格模型
         tableModel = new DefaultTableModel();
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel);
 
         table.getTableHeader().setReorderingAllowed(false);
 
@@ -100,12 +105,28 @@ public class MainWindow {
         table.setDefaultEditor(Object.class, new DisableCellEditor());
 
         // 设置表格字体
-        Font tableFont = new Font("Arial", Font.PLAIN, 20);
+        Font tableFont = new Font("SimSun", Font.PLAIN, 20);
         table.setFont(tableFont);
 
         // 设置表格行高
         int rowHeight = 50;
         table.setRowHeight(rowHeight);
+
+
+        // 设置表格数据
+        tableModel.setColumnIdentifiers(columnNames);
+
+        // 获取列模型
+        TableColumnModel columnModel = table.getColumnModel();
+
+
+        // 设置列的宽度
+        columnModel.getColumn(0).setPreferredWidth(300);
+        columnModel.getColumn(1).setPreferredWidth(50);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(50);
+        columnModel.getColumn(4).setPreferredWidth(150);
+        columnModel.getColumn(5).setPreferredWidth(500);
 
         // 设置表格居中对齐
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -121,18 +142,6 @@ public class MainWindow {
         // 添加滚动面板到主面板
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // 设置表格数据
-        tableModel.setColumnIdentifiers(columnNames);
-
-        // 获取列模型
-        TableColumnModel columnModel = table.getColumnModel();
-
-
-        // 设置列的宽度
-        columnModel.getColumn(0).setPreferredWidth(300);
-        columnModel.getColumn(1).setPreferredWidth(150);
-        columnModel.getColumn(2).setPreferredWidth(200);
 
         // 添加按钮到底部面板
         JPanel buttonPanel = new JPanel();
@@ -162,7 +171,7 @@ public class MainWindow {
             public void run() {
                 // 在这里编写需要定时执行的函数代码
                 // 将对象的值强行转换成两维数组
-                System.out.println("查询信息");
+                System.out.println("定时器查询信息，更新表格");
                 Queue<Object[]> message = new ConcurrentLinkedQueue<>(threadManager.newMessage);
                 // 新建一个类
                 Object[][] newMessage = new Object[21][];
@@ -181,6 +190,15 @@ public class MainWindow {
                 }
                 // 更新表格数据
                 tableModel.setDataVector(newMessage, columnNames);
+                // 获取列模型
+                TableColumnModel columnModel = table.getColumnModel();
+                // 设置列的宽度
+                columnModel.getColumn(0).setPreferredWidth(300);
+                columnModel.getColumn(1).setPreferredWidth(50);
+                columnModel.getColumn(2).setPreferredWidth(50);
+                columnModel.getColumn(3).setPreferredWidth(50);
+                columnModel.getColumn(4).setPreferredWidth(150);
+                columnModel.getColumn(5).setPreferredWidth(500);
             }
         }, delay, period);
     }
