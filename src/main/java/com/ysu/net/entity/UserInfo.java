@@ -12,8 +12,115 @@ public class UserInfo {
     double heartRate;
     double breathRate;
     double temperature;
-
+    double baiXiBaoNumber;
+    double linBaNumber;
+    double xueXiaoBan;
+    double redNumber;
+    double average;
+    double suanjianDu;
+    double niaoBiZhong;
+    double niaoDanYuan;
+    String yinYue;
+    String niaoTang;
     double xuetang;
+
+    double xueya;
+
+    public double getXueya() {
+        return xueya;
+    }
+
+    public void setXueya(double xueya) {
+        this.xueya = xueya;
+    }
+
+    public double getBaiXiBaoNumber() {
+        return baiXiBaoNumber;
+    }
+
+    public void setBaiXiBaoNumber(double baiXiBaoNumber) {
+        this.baiXiBaoNumber = baiXiBaoNumber;
+    }
+
+    public double getLinBaNumber() {
+        return linBaNumber;
+    }
+
+    public void setLinBaNumber(double linBaNumber) {
+        this.linBaNumber = linBaNumber;
+    }
+
+    public double getXueXiaoBan() {
+        return xueXiaoBan;
+    }
+
+    public void setXueXiaoBan(double xueXiaoBan) {
+        this.xueXiaoBan = xueXiaoBan;
+    }
+
+    public double getRedNumber() {
+        return redNumber;
+    }
+
+    public void setRedNumber(double redNumber) {
+        this.redNumber = redNumber;
+    }
+
+    public double getAverage() {
+        return average;
+    }
+
+    public void setAverage(double average) {
+        this.average = average;
+    }
+
+    public double getSuanjianDu() {
+        return suanjianDu;
+    }
+
+    public void setSuanjianDu(double suanjianDu) {
+        this.suanjianDu = suanjianDu;
+    }
+
+    public double getNiaoBiZhong() {
+        return niaoBiZhong;
+    }
+
+    public void setNiaoBiZhong(double niaoBiZhong) {
+        this.niaoBiZhong = niaoBiZhong;
+    }
+
+    public double getNiaoDanYuan() {
+        return niaoDanYuan;
+    }
+
+    public void setNiaoDanYuan(double niaoDanYuan) {
+        this.niaoDanYuan = niaoDanYuan;
+    }
+
+    public String getYinYue() {
+        return yinYue;
+    }
+
+    public void setYinYue(String yinYue) {
+        this.yinYue = yinYue;
+    }
+
+    public String getNiaoTang() {
+        return niaoTang;
+    }
+
+    public void setNiaoTang(String niaoTang) {
+        this.niaoTang = niaoTang;
+    }
+
+    public double getXuetang() {
+        return xuetang;
+    }
+
+    public void setXuetang(double xuetang) {
+        this.xuetang = xuetang;
+    }
 
     public double getHeartRate() {
         return heartRate;

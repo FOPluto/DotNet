@@ -85,13 +85,11 @@ public class ThreadManager implements Runnable{
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             System.out.println("服务器已启动，监听端口：" + port);
-
             while (true) {
                 // 监听并接受客户端连接
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("接收到客户端连接：" + clientSocket.getInetAddress());
-
-                // 创建线程处理客户端连接，对
+                // 创建线程处理客户端连接
                 Thread clientThread = new Thread(() -> {
                     try {
                         InputStream inputStream = clientSocket.getInputStream();
@@ -111,7 +109,7 @@ public class ThreadManager implements Runnable{
                                 doctorInfo.setIp(String.valueOf(clientSocket.getInetAddress()).substring(1));
                                 doctorInfo.setName(splitMassage[1]);
                                 if (!infoList.containsKey(doctorInfo.getFloor())) infoList.put(doctorInfo.getFloor(), doctorInfo);
-                                // send2Doctor("1;1;70;89;20;38.5;0001;", doctorInfo.getIp()); // 是否异常(0正常 1异常);病人编号;心率;血压;呼吸频率;体温;几号位异常(如果正常0000;如果异常。。。)
+                                send2Doctor("1;1;70;89;20;38.5;0001;", doctorInfo.getIp()); // 是否异常(0正常 1异常);病人编号;心率;血压;呼吸频率;体温;几号位异常(如果正常0000;如果异常。。。)
                             } else if(port == 8081) { // 如果是患者端
                                 // 获取患者的基本信息
                                 userInfo.setFloor(Integer.parseInt(splitMassage[0]));
@@ -119,9 +117,20 @@ public class ThreadManager implements Runnable{
                                 userInfo.setBedId(Integer.parseInt(splitMassage[2]));
                                 userInfo.setName(splitMassage[3]);
                                 userInfo.setAge(Integer.parseInt(splitMassage[4]));
-                                userInfo.setHeartRate(Double.parseDouble(splitMassage[4]));
-                                userInfo.setBreathRate(Double.parseDouble(splitMassage[5]));
-                                userInfo.setTemperature(Double.parseDouble(splitMassage[6]));
+                                userInfo.setBaiXiBaoNumber(Double.parseDouble(splitMassage[5]));
+                                userInfo.setLinBaNumber(Double.parseDouble(splitMassage[6]));
+                                userInfo.setXueXiaoBan(Double.parseDouble(splitMassage[7]));
+                                userInfo.setRedNumber(Double.parseDouble(splitMassage[8]));
+                                userInfo.setAverage(Double.parseDouble(splitMassage[9]));
+                                userInfo.setSuanjianDu(Double.parseDouble(splitMassage[10]));
+                                userInfo.setNiaoBiZhong(Double.parseDouble(splitMassage[11]));
+                                userInfo.setNiaoDanYuan(Double.parseDouble(splitMassage[12]));
+                                userInfo.setYinYue(splitMassage[13]);
+                                userInfo.setNiaoTang(splitMassage[14]);
+                                userInfo.setXuetang(Double.parseDouble(splitMassage[15]));
+                                userInfo.setHeartRate(Double.parseDouble(splitMassage[16]));
+                                userInfo.setBreathRate(Double.parseDouble(splitMassage[17]));
+                                userInfo.setTemperature(Double.parseDouble(splitMassage[18]));
                                 // 获取当前时间
                                 LocalDateTime currentTime = LocalDateTime.now();
                                 // 定义日期时间格式
@@ -129,40 +138,118 @@ public class ThreadManager implements Runnable{
                                 // 格式化为字符串
                                 String formattedTime = currentTime.format(formatter);
                                 // 表示在几号位出现异常
-                                StringBuilder flag = new StringBuilder("0000");
+                                StringBuilder flag = new StringBuilder("000000000000000");
                                 StringBuilder errorMessage = new StringBuilder();
                                 // 表示是否存在异常
                                 Boolean errorFlag = false; // 开始认为不存在异常
                                 //开始判断
-                                // 判断体温
-                                if(userInfo.getTemperature() < 36.1) {
-                                    System.out.println("检测到体温偏低");
+                                // 判断白细胞数量
+                                if(!(userInfo.getBaiXiBaoNumber() >= 4 && userInfo.getBaiXiBaoNumber() <= 10)) {
+                                    flag.setCharAt(0, '1');
+                                    errorMessage.append("白细胞数量异常");
                                     errorFlag = true;
-                                    errorMessage.append("体温偏低；");
-                                } else if(userInfo.getTemperature() > 37.5) {
-                                    System.out.println("检测到体温偏高");
-                                    errorFlag = true;
-                                    errorMessage.append("体温偏高；");
                                 }
-                                // 判断呼吸频率
-                                if(userInfo.getBreathRate() < 11) {
-                                    System.out.println("检测到呼吸频率偏低");
+                                // 判断淋巴细胞的数量
+                                if(!(userInfo.getLinBaNumber() >= 0.8 && userInfo.getLinBaNumber() <= 4.0)) {
+                                    flag.setCharAt(1, '1');
+                                    errorMessage.append("淋巴细胞数量异常");
                                     errorFlag = true;
-                                    errorMessage.append("呼吸缓慢");
-                                } else if(userInfo.getBreathRate() > 21) {
-                                    System.out.println("检测到呼吸频率偏高");
+                                }
+                                // 判断血小板的数量
+                                if(!(userInfo.getXueXiaoBan() >= 100 && userInfo.getXueXiaoBan() <= 300)) {
+                                    flag.setCharAt(2, '1');
+                                    errorMessage.append("血小板数量异常");
                                     errorFlag = true;
-                                    errorMessage.append("呼吸急促");
+                                }
+                                // 判断红细胞的数量
+                                if(!(userInfo.getRedNumber() >= 3.5 && userInfo.getRedNumber() <= 5.5)) {
+                                    flag.setCharAt(3, '1');
+                                    errorMessage.append("红细胞数量异常");
+                                    errorFlag = true;
+                                }
+                                // 判断红细胞体积
+                                if(!(userInfo.getAverage() >= 80 && userInfo.getAverage() <= 100)) {
+                                    flag.setCharAt(4, '1');
+                                    errorMessage.append("红细胞平均体积异常");
+                                    errorFlag = true;
+                                }
+                                // 判断酸碱度
+                                if((userInfo.getSuanjianDu() >= 8.0 || userInfo.getRedNumber() <= 4.6)) {
+                                    flag.setCharAt(5, '1');
+                                    errorMessage.append("尿检pH值异常");
+                                    errorFlag = true;
+                                }
+                                // 尿比重
+                                if(!(userInfo.getNiaoBiZhong() >= 1.015 && userInfo.getNiaoBiZhong() <= 1.025)) {
+                                    flag.setCharAt(6, '1');
+                                    errorMessage.append("尿重比异常");
+                                    errorFlag = true;
+                                }
+                                // 尿胆原
+                                if(userInfo.getNiaoDanYuan() >= 16) {
+                                    flag.setCharAt(7, '1');
+                                    errorMessage.append("尿胆原异常");
+                                    errorFlag = true;
+                                }
+                                // 隐血
+                                if(!Objects.equals(userInfo.getYinYue(), "阴性-")) {
+                                    flag.setCharAt(8, '1');
+                                    errorMessage.append("隐血异常");
+                                    errorFlag = true;
+                                }
+                                // 尿糖
+                                if(!Objects.equals(userInfo.getNiaoTang(), "阴性-")) {
+                                    flag.setCharAt(9, '1');
+                                    errorMessage.append("尿糖阳性");
+                                    errorFlag = true;
+                                }
+                                // 血压
+                                if(userInfo.getXueya() < 80 || userInfo.getXuetang() > 120) {
+                                    flag.setCharAt(10, '1');
+                                    errorMessage.append("血压数值异常");
+                                    errorFlag = true;
+                                }
+                                // 血糖
+                                if(userInfo.getXuetang() < 80 || userInfo.getXuetang() > 120) {
+                                    flag.setCharAt(11, '1');
+                                    errorMessage.append("血糖数值异常");
+                                    errorFlag = true;
                                 }
                                 // 检测心率
                                 if(userInfo.getHeartRate() < 60) {
+                                    flag.setCharAt(12, '1');
                                     System.out.println("检测到心率偏低");
                                     errorFlag = true;
                                     errorMessage.append("心率过低");
                                 } else if(userInfo.getHeartRate() > 100) {
+                                    flag.setCharAt(12, '1');
                                     System.out.println("检测到心率偏高");
                                     errorFlag = true;
                                     errorMessage.append("心率过高");
+                                }
+                                // 判断呼吸频率
+                                if(userInfo.getBreathRate() < 11) {
+                                    flag.setCharAt(13, '1');
+                                    System.out.println("检测到呼吸频率偏低");
+                                    errorFlag = true;
+                                    errorMessage.append("呼吸缓慢");
+                                } else if(userInfo.getBreathRate() > 21) {
+                                    flag.setCharAt(13, '1');
+                                    System.out.println("检测到呼吸频率偏高");
+                                    errorFlag = true;
+                                    errorMessage.append("呼吸急促");
+                                }
+                                // 判断体温
+                                if(userInfo.getTemperature() < 36.1) {
+                                    flag.setCharAt(14, '1');
+                                    System.out.println("检测到体温偏低");
+                                    errorFlag = true;
+                                    errorMessage.append("体温偏低；");
+                                } else if(userInfo.getTemperature() > 37.5) {
+                                    flag.setCharAt(14, '1');
+                                    System.out.println("检测到体温偏高");
+                                    errorFlag = true;
+                                    errorMessage.append("体温偏高；");
                                 }
                                 // 当前时间, 楼层, 房间号, 床位号, 姓名, 是否正常
                                 Object[] item = new Object[]{formattedTime, splitMassage[0], splitMassage[1], splitMassage[2], splitMassage[3], errorFlag ? errorMessage : "正常"};
